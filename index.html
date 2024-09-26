@@ -30,7 +30,7 @@
       }
 
       const speedRangeSec = {slowest: 24, fastest: 10};
-      const toasterSizePx = 64;
+      const toasterSizePx = 100;
       const toastSizePx = 64;
       
       function grantMotion(newDiv, size, onEnd) {
@@ -73,6 +73,20 @@
         const newDiv = document.createElement('div');
         newDiv.classList.add('toaster');
         grantMotion(newDiv, toasterSizePx, createToaster);
+        // animation: flap .5s steps(8) infinite alternate;
+        const a = newDiv.animate(
+          [
+            {backgroundPosition: "0px"},
+            {backgroundPosition: "-800px"},
+          ],
+          {
+            duration: 500,
+            delay: random(0,500),
+            easing: "steps(8)",
+            iterations: Infinity,
+          }
+        );
+        console.log(a)
       }
 
       function createToast() {
@@ -95,10 +109,9 @@
     <style>
       .toaster {
         position: absolute;
-        width: 64px;
-        height: 64px;
-        background-image: url("toaster-sprite.gif");
-        animation: flap .2s steps(4) infinite alternate;
+        width: 100px;
+        height: 100px;
+        background-image: url("toaster.png");
       }
 
       .toast {
@@ -110,7 +123,7 @@
 
       @keyframes flap {
          from { background-position:    0px; }
-           to { background-position: -256px; }
+           to { background-position: -800px; }
       }
 
       @keyframes fly {
