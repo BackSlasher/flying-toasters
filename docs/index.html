@@ -69,11 +69,14 @@
         document.body.appendChild(newDiv);
       }
 
-      function createToaster() {
+      function createNormalToaster() {
         const newDiv = document.createElement('div');
         newDiv.classList.add('toaster');
         grantMotion(newDiv, toasterSizePx, createToaster);
         // animation: flap .5s steps(8) infinite alternate;
+        newDiv.style.backgroundImage = 'url("toaster.png")';
+        newDiv.style.height = "100px";
+        newDiv.style.width = "100px";
         const a = newDiv.animate(
           [
             {backgroundPosition: "0px"},
@@ -86,6 +89,37 @@
             iterations: Infinity,
           }
         );
+      }
+
+      function createHoolaToaster() {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('toaster');
+        grantMotion(newDiv, toasterSizePx, createToaster);
+        // animation: flap .5s steps(8) infinite alternate;
+        newDiv.style.backgroundImage = 'url("toaster-hoola.png")';
+        newDiv.style.height = "74px";
+        newDiv.style.width = "100px";
+        const a = newDiv.animate(
+          [
+            {backgroundPosition: "0px"},
+            {backgroundPosition: "-900px"},
+          ],
+          {
+            duration: 1000,
+            delay: random(0,500),
+            easing: "steps(9)",
+            iterations: Infinity,
+          }
+        );
+      }
+
+      function createToaster() {
+        const toasterType = random(0,5);
+        if (toasterType == 5) {
+          createHoolaToaster();
+        } else {
+          createNormalToaster();
+        }
       }
 
       function createToast() {
@@ -108,9 +142,6 @@
     <style>
       .toaster {
         position: absolute;
-        width: 100px;
-        height: 100px;
-        background-image: url("toaster.png");
       }
 
       .toast {
@@ -118,20 +149,6 @@
         width: 64px;
         height: 64px;
         background-image: url("toast1.gif");
-      }
-
-      @keyframes flap {
-         from { background-position:    0px; }
-           to { background-position: -800px; }
-      }
-
-      @keyframes fly {
-        from {
-          transform: translate(0, 0);
-        }
-        to {
-          transform: translate(-1600px, 1600px);
-        }
       }
 
       body {
