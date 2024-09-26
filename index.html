@@ -1,0 +1,138 @@
+<html>
+  <head>
+    <script>
+      "use strict";
+
+      function random(min,max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+
+      function randomPosition() {
+        const windowWidth = window.innerWidth * 0.75;
+        const windowHeight = window.innerHeight * 0.75;
+        const min = 0 - windowWidth;
+        const max = windowHeight;
+        const rand = random(min,max);
+
+        if (rand < 0) {
+          return {
+            width: 0-rand,
+            height: 0,
+
+          };
+        } else {
+          return {
+            width: 0,
+            height: rand,
+          }
+        }
+      }
+
+      const speedRangeSec = {slowest: 24, fastest: 10};
+      const toasterSizePx = 64;
+      const toastSizePx = 64;
+      
+      function grantMotion(newDiv, size, onEnd) {
+        const speedMs = random(speedRangeSec.fastest, speedRangeSec.slowest) * 1000;
+        const delayMs = (random(speedRangeSec.fastest, speedRangeSec.slowest) - speedRangeSec.fastest) * 1000;
+        const position = randomPosition();
+        const realPosition = {
+          right: position.width-size,
+          top: position.height-size,
+        }
+        newDiv.style.right = realPosition.right;
+        newDiv.style.top = realPosition.top;
+
+        let distanceTransform;
+        {
+          const windowWidth = window.innerWidth;
+          const windowHeight = window.innerHeight;
+          const distanceRight = windowWidth - realPosition.right;
+          const distanceTop = windowHeight - realPosition.top;
+          distanceTransform = Math.min(distanceTop, distanceRight);
+        }
+        const transformEnd = `translate( ${0-distanceTransform}px, ${distanceTransform}px)`;
+
+        const flightAnimation = newDiv.animate(
+          [
+            {transform: "translate(0,0)"},
+            {transform: transformEnd},
+          ],
+          {
+            duration: speedMs,
+            easing: "linear",
+            delay: delayMs,
+          }
+        );
+        flightAnimation.addEventListener('finish',onEnd);
+        document.body.appendChild(newDiv);
+      }
+
+      function createToaster() {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('toaster');
+        grantMotion(newDiv, toasterSizePx, createToaster);
+      }
+
+      function createToast() {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('toast');
+        newDiv.style.backgroundImage = `url("toast${random(0,3)}.gif")`;
+        grantMotion(newDiv, toastSizePx, createToast);
+      }
+
+      const toasterCount = 10;
+      const toastCount = 10;
+      const traversalTimeSec = 10;
+
+      function go() {
+        Array(toasterCount).fill().forEach(createToaster);
+        Array(toastCount).fill().forEach(createToast);
+      }
+      window.onload = go;
+    </script>
+    <style>
+      .toaster {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        background-image: url("toaster-sprite.gif");
+        animation: flap .2s steps(4) infinite alternate;
+      }
+
+      .toast {
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        background-image: url("toast1.gif");
+      }
+
+      @keyframes flap {
+         from { background-position:    0px; }
+           to { background-position: -256px; }
+      }
+
+      @keyframes fly {
+        from {
+          transform: translate(0, 0);
+        }
+        to {
+          transform: translate(-1600px, 1600px);
+        }
+      }
+
+      body {
+        background-color: #111;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        font-family: 'ChicagoFLF', 'Times New Roman', 'Georgia', serif;
+        overflow: hidden;
+      }
+
+    </style>
+  </head>
+  <body>
+  </body>
+</html>
