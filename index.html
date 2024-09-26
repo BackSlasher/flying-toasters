@@ -38,8 +38,8 @@
         const delayMs = (random(speedRangeSec.fastest, speedRangeSec.slowest) - speedRangeSec.fastest) * 1000;
         const position = randomPosition();
         const realPosition = {
-          right: position.width-size,
-          top: position.height-size,
+          right: position.width-size*2,
+          top: position.height-size*2,
         }
         newDiv.style.right = realPosition.right;
         newDiv.style.top = realPosition.top;
