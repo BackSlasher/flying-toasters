@@ -66,6 +66,7 @@
           }
         );
         flightAnimation.addEventListener('finish',onEnd);
+        flightAnimation.addEventListener('finish',() => newDiv.remove());
         document.body.appendChild(newDiv);
       }
 
