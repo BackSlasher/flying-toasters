@@ -114,9 +114,33 @@
         );
       }
 
+      function createSwimmerToaster() {
+        const newDiv = document.createElement('div');
+        newDiv.classList.add('toaster');
+        grantMotion(newDiv, toasterSizePx, createToaster);
+        // animation: flap .5s steps(8) infinite alternate;
+        newDiv.style.backgroundImage = 'url("toaster-swimmer.png")';
+        newDiv.style.height = "100px";
+        newDiv.style.width = "98px";
+        const a = newDiv.animate(
+          [
+            {backgroundPosition: "0px"},
+            {backgroundPosition: "-1100px"},
+          ],
+          {
+            duration: 1500,
+            delay: random(0,500),
+            easing: "steps(11)",
+            iterations: Infinity,
+          }
+        );
+      }
+
       function createToaster() {
-        const toasterType = random(0,5);
-        if (toasterType == 5) {
+        const toasterType = random(0,6);
+        if (toasterType == 6) {
+          createSwimmerToaster()
+        } else if (toasterType == 5) {
           createHoolaToaster();
         } else {
           createNormalToaster();
